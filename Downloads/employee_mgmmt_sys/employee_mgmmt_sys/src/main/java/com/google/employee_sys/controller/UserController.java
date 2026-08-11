@@ -21,6 +21,7 @@ public class UserController {
 	public UserController(UserService service, OtpService otpService) {
 		this.service = service;
 		this.otpService = otpService;
+		
 	}
 
 	@PostMapping("/register")

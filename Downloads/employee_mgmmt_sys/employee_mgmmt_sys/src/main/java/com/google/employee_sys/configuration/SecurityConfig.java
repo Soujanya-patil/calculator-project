@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
+
 @Configuration
 public class SecurityConfig {
 	
@@ -21,8 +22,12 @@ public class SecurityConfig {
 		.authorizeHttpRequests(auth->auth
 				.requestMatchers("/users/register","/users/verify-otp")
 				.permitAll()
-				.requestMatchers("/employess/**")
-				.authenticated()
+				.requestMatchers(org.springframework.http.HttpMethod.GET,"/employees/**").hasAnyRole("ADMIN","USER")
+				.requestMatchers("/employees/**").hasRole("ADMIN")//optimized instead of below 3 line i  can write this one line
+//				.requestMatchers(org.springframework.http.HttpMethod.POST,"/employees/**").hasRole("ADMIN")
+//				.requestMatchers(org.springframework.http.HttpMethod.PUT,"/employees/**").hasRole("ADMIN")
+//				.requestMatchers(org.springframework.http.HttpMethod.DELETE,"/employees/**").hasRole("ADMIN")
+				
 				.anyRequest().authenticated()
 				)
 		.httpBasic(Customizer.withDefaults());

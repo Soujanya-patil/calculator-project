@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 
 import com.google.employee_sys.entity.Employee;
+import com.google.employee_sys.exception.UserNotFoundException;
 import com.google.employee_sys.repository.EmployeeRepo;
 
 @Service
@@ -19,9 +20,12 @@ public class EmployeeService {
 		return "employee inserted successfully";
 	}
 	
-	public Object fechById(String email) {
-		return employeeRepo.findById(email);
-	}
+	public Object fechById(Long id) {
+
+        return employeeRepo.findById(id)
+                .orElseThrow(() ->
+                    new UserNotFoundException("Employee not found with id: " + id));
+  	}
 	
 	public Object fetchAll() {
 		return employeeRepo.findAll();
@@ -32,8 +36,8 @@ public class EmployeeService {
 		return "employee updated successfully";
 	}
 	
-	public String deleteById(String email) {
-		 employeeRepo.deleteById(email);
+	public String deleteById(Long id) {
+		 employeeRepo.deleteById(id);
 		 return "employee deleted successfully based on id";
 	}
 	

@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.employee_sys.entity.Employee;
 import com.google.employee_sys.service.EmployeeService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/employees")
 public class EmployeeController {
@@ -22,13 +24,13 @@ public class EmployeeController {
 	}
 	
 	@PostMapping
-	public String insert(@RequestBody Employee employee) {
+	public String insert(@Valid @RequestBody Employee employee) {
 		return employeeService.insert(employee);
 	}
 	
-	@GetMapping("/id/{email}")
-	public Object fechById(@PathVariable String email) {
-		return employeeService.fechById(email);
+	@GetMapping("/id/{id}")
+	public Object fechById(@PathVariable Long id) {
+		return employeeService.fechById(id);
 	}
 	
 	@GetMapping("/all")
@@ -41,9 +43,9 @@ public class EmployeeController {
 		return employeeService.update(employee);
 	}
 	
-	@DeleteMapping("/id{email}")
-	public String deleteById(@PathVariable String email) {
-		return employeeService.deleteById(email);
+	@DeleteMapping("/id{id}")
+	public String deleteById(@PathVariable Long id) {
+		return employeeService.deleteById(id);
 	}
 	
 	@DeleteMapping

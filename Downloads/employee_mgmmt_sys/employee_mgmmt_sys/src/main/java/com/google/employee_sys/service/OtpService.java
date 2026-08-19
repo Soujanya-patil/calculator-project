@@ -1,11 +1,16 @@
 package com.google.employee_sys.service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import com.google.employee_sys.dto.VerifyOtpRequest;
 import com.google.employee_sys.entity.User;
+import com.google.employee_sys.exception.InvalidOtpException;
+import com.google.employee_sys.exception.OtpAlreadyVerified;
+import com.google.employee_sys.exception.OtpExpiredException;
+import com.google.employee_sys.exception.UserNotFoundException;
 import com.google.employee_sys.repository.UserRepo;
 
 @Service
@@ -17,28 +22,40 @@ public class OtpService {
 	}
 	
 	public String verifyOtp(VerifyOtpRequest verifyOtpRequest) {
-		Optional<User> oe= userRepo.findByEmail(verifyOtpRequest.getEmail());
-		if(oe.isPresent()) {
-			User user=oe.get();
-			if(!user.getOtp().equals(verifyOtpRequest.getOtp())) {
-				return "Invalid OTP. Please try again.";
-			}
-			if(user.getOtpExpiryTime().isBefore(java.time.LocalDateTime.now())) {
-				return "OTP has expired. Please request a new one.";
-			}
-			else {
-				user.setVerified(true);
-				user.setOtp(null);
-				user.setOtpExpiryTime(null);
-				userRepo.save(user);
-				return "OTP verified successfully. Your account is now verified.";
-			}
-		}
-		else {
-			return "User not found with the provided email.";
-		}
-	
-	}
+		Optional<User> optionalUser =
+                userRepo.findByEmail(verifyOtpRequest.getEmail());
+
+        if (optionalUser.isPresent()) {
+
+            User user = optionalUser.get();
+
+            // OTP is null means user has already been verified
+            if (user.getOtp() == null) {
+                throw new OtpAlreadyVerified("OTP Already Verified");
+            }
+
+            // Check OTP
+            if (!user.getOtp().equals(verifyOtpRequest.getOtp())) {
+                throw new InvalidOtpException("Invalid OTP");
+            }
+
+            // Check OTP expiry
+            if (LocalDateTime.now().isAfter(user.getOtpExpiryTime())) {
+                throw new OtpExpiredException("OTP expired");
+            }
+
+            // Verification successful
+            user.setVerified(true);
+            user.setOtp(null);
+            user.setOtpExpiryTime(null);
+
+            userRepo.save(user);
+
+            return "OTP verified successfully";
+        }
+
+        throw new UserNotFoundException("User not found");
+    }
 	
 
 }

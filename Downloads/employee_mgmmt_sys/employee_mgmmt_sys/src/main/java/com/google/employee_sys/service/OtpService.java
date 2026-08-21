@@ -47,7 +47,7 @@ public class OtpService {
 			user.setOtp(null);
 			user.setOtpExpiryTime(null);
 			userRepo.save(user);			
-			throw new OtpExpiredException("otp expired please request a new otp");
+			throw new OtpExpiredException("otp expired please request a new otp by choosing the resend-otp end point");
 		}
 		
 		user.setVerified(true);

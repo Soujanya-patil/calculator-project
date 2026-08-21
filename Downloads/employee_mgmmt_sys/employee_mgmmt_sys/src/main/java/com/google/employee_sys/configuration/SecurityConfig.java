@@ -20,7 +20,7 @@ public class SecurityConfig {
 		http
 		.csrf(csrf->csrf.disable())
 		.authorizeHttpRequests(auth->auth
-				.requestMatchers("/users/register","/users/verify-otp")
+				.requestMatchers("/users/register","/users/verify-otp","/error","/users/resend-otp/**")
 				.permitAll()
 				.requestMatchers(org.springframework.http.HttpMethod.GET,"/employees/**").hasAnyRole("ADMIN","USER")
 				.requestMatchers("/employees/**").hasRole("ADMIN")//optimized instead of below 3 line i  can write this one line

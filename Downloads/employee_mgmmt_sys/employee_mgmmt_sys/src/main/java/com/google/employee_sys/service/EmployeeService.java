@@ -20,11 +20,11 @@ public class EmployeeService {
 		return "employee inserted successfully";
 	}
 	
-	public Object fechById(Long id) {
+	public Object fechById(String email) {
 
-        return employeeRepo.findById(id)
+        return employeeRepo.findById(email)
                 .orElseThrow(() ->
-                    new UserNotFoundException("Employee not found with id: " + id));
+                    new UserNotFoundException("Employee not found with email: " + email));
   	}
 	
 	public Object fetchAll() {
@@ -36,8 +36,8 @@ public class EmployeeService {
 		return "employee updated successfully";
 	}
 	
-	public String deleteById(Long id) {
-		 employeeRepo.deleteById(id);
+	public String deleteById(String email) {
+		 employeeRepo.deleteById(email);
 		 return "employee deleted successfully based on id";
 	}
 	

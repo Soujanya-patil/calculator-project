@@ -28,9 +28,9 @@ public class EmployeeController {
 		return employeeService.insert(employee);
 	}
 	
-	@GetMapping("/id/{id}")
-	public Object fechById(@PathVariable Long id) {
-		return employeeService.fechById(id);
+	@GetMapping("/email/{email}")
+	public Object fechById(@PathVariable String email) {
+		return employeeService.fechById(email);
 	}
 	
 	@GetMapping("/all")
@@ -43,9 +43,9 @@ public class EmployeeController {
 		return employeeService.update(employee);
 	}
 	
-	@DeleteMapping("/id{id}")
-	public String deleteById(@PathVariable Long id) {
-		return employeeService.deleteById(id);
+	@DeleteMapping("/email/{email}")
+	public String deleteById(@PathVariable String email) {
+		return employeeService.deleteById(email);
 	}
 	
 	@DeleteMapping

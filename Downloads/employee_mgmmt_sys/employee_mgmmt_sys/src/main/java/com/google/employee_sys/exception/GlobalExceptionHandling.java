@@ -10,8 +10,31 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@RestControllerAdvice
+import jakarta.validation.ConstraintViolationException;
+
+@RestControllerAdvice 
 public class GlobalExceptionHandling {
+	
+	
+	@ExceptionHandler(ConstraintViolationException.class)
+    public Map<String, Object> handleConstraintViolation(
+            ConstraintViolationException ex) {
+
+        Map<String, String> errors = new HashMap<>();
+
+        ex.getConstraintViolations().forEach(error -> {
+            errors.put(
+                error.getPropertyPath().toString(),
+                error.getMessage()
+            );
+        });
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "Validation failed");
+        response.put("errors", errors);
+
+        return response;
+    }
 	
 	@ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> invalidData(

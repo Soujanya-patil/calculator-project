@@ -11,4 +11,5 @@ public class VerifyOtpRequest {
 	    private String email;
 
 	    @NotBlank(message = "OTP cannot be empty")
-	    private String otp;}
+	    private String otp;
+	    }

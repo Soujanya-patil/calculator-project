@@ -1,5 +1,6 @@
 package com.google.employee_sys.controller;
 
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,6 +10,8 @@ import com.google.employee_sys.dto.RegisterRequest;
 import com.google.employee_sys.dto.VerifyOtpRequest;
 import com.google.employee_sys.service.OtpService;
 import com.google.employee_sys.service.UserService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/users")
@@ -25,13 +28,18 @@ public class UserController {
 	}
 
 	@PostMapping("/register")
-	public String register(@RequestBody RegisterRequest registerRequest) {
+	public String register(@Valid @RequestBody RegisterRequest registerRequest) {
 		return service.register(registerRequest);
 	}
 	
 	@PostMapping("/verify-otp")
-	public String verifyOtp(@RequestBody VerifyOtpRequest verifyOtpRequest) {
+	public String verifyOtp(@Valid @RequestBody VerifyOtpRequest verifyOtpRequest) {
 		return otpService.verifyOtp(verifyOtpRequest);
+	}
+	
+	@PostMapping("/resend-otp/{email}")
+	public String resendOtp(@PathVariable String email) {
+		return service.resendOtp(email);
 	}
 	
 	
